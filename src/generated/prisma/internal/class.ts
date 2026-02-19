@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.4.0",
   "engineVersion": "ab56fe763f921d033a6c195e7ddeb3e255bdbb57",
   "activeProvider": "postgresql",
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider     = \"prisma-client\"\n  output       = \"../src/generated/prisma\"\n  moduleFormat = \"cjs\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider     = \"prisma-client\"\n  output       = \"../src/generated/prisma\"\n  moduleFormat = \"cjs\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id       Int    @id @default(autoincrement())\n  email    String @unique\n  name     String\n  password String\n  forms    Form[]\n}\n\nmodel Form {\n  id          String   @id @default(uuid())\n  title       String\n  description String?\n  userId      Int\n  user        User     @relation(fields: [userId], references: [id])\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -32,10 +32,10 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"forms\",\"kind\":\"object\",\"type\":\"Form\",\"relationName\":\"FormToUser\"}],\"dbName\":null},\"Form\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"FormToUser\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 config.parameterizationSchema = {
-  strings: JSON.parse("[]"),
-  graph: "AAAA"
+  strings: JSON.parse("[\"where\",\"orderBy\",\"cursor\",\"user\",\"forms\",\"_count\",\"User.findUnique\",\"User.findUniqueOrThrow\",\"User.findFirst\",\"User.findFirstOrThrow\",\"User.findMany\",\"data\",\"User.createOne\",\"User.createMany\",\"User.createManyAndReturn\",\"User.updateOne\",\"User.updateMany\",\"User.updateManyAndReturn\",\"create\",\"update\",\"User.upsertOne\",\"User.deleteOne\",\"User.deleteMany\",\"having\",\"_avg\",\"_sum\",\"_min\",\"_max\",\"User.groupBy\",\"User.aggregate\",\"Form.findUnique\",\"Form.findUniqueOrThrow\",\"Form.findFirst\",\"Form.findFirstOrThrow\",\"Form.findMany\",\"Form.createOne\",\"Form.createMany\",\"Form.createManyAndReturn\",\"Form.updateOne\",\"Form.updateMany\",\"Form.updateManyAndReturn\",\"Form.upsertOne\",\"Form.deleteOne\",\"Form.deleteMany\",\"Form.groupBy\",\"Form.aggregate\",\"AND\",\"OR\",\"NOT\",\"id\",\"title\",\"description\",\"userId\",\"createdAt\",\"updatedAt\",\"equals\",\"in\",\"notIn\",\"lt\",\"lte\",\"gt\",\"gte\",\"not\",\"contains\",\"startsWith\",\"endsWith\",\"email\",\"name\",\"password\",\"every\",\"some\",\"none\",\"is\",\"isNot\",\"connectOrCreate\",\"upsert\",\"createMany\",\"set\",\"disconnect\",\"delete\",\"connect\",\"updateMany\",\"deleteMany\",\"increment\",\"decrement\",\"multiply\",\"divide\"]"),
+  graph: "cxYgCAQAAEgAIC4AAEUAMC8AAAkAEDAAAEUAMDECAAAAAUIBAAAAAUMBAEcAIUQBAEcAIQEAAAABACAKAwAATAAgLgAASQAwLwAAAwAQMAAASQAwMQEARwAhMgEARwAhMwEASgAhNAIARgAhNUAASwAhNkAASwAhAgMAAG0AIDMAAE0AIAoDAABMACAuAABJADAvAAADABAwAABJADAxAQAAAAEyAQBHACEzAQBKACE0AgBGACE1QABLACE2QABLACEDAAAAAwAgAQAABAAwAgAABQAgAQAAAAMAIAEAAAABACAIBAAASAAgLgAARQAwLwAACQAQMAAARQAwMQIARgAhQgEARwAhQwEARwAhRAEARwAhAQQAAGwAIAMAAAAJACABAAAKADACAAABACADAAAACQAgAQAACgAwAgAAAQAgAwAAAAkAIAEAAAoAMAIAAAEAIAUEAABrACAxAgAAAAFCAQAAAAFDAQAAAAFEAQAAAAEBCwAADgAgBDECAAAAAUIBAAAAAUMBAAAAAUQBAAAAAQELAAAQADABCwAAEAAwBQQAAF4AIDECAFYAIUIBAFMAIUMBAFMAIUQBAFMAIQIAAAABACALAAATACAEMQIAVgAhQgEAUwAhQwEAUwAhRAEAUwAhAgAAAAkAIAsAABUAIAIAAAAJACALAAAVACADAAAAAQAgEgAADgAgEwAAEwAgAQAAAAEAIAEAAAAJACAFBQAAWQAgGAAAWgAgGQAAXQAgGgAAXAAgGwAAWwAgBy4AAEQAMC8AABwAEDAAAEQAMDECADgAIUIBADYAIUMBADYAIUQBADYAIQMAAAAJACABAAAbADAXAAAcACADAAAACQAgAQAACgAwAgAAAQAgAQAAAAUAIAEAAAAFACADAAAAAwAgAQAABAAwAgAABQAgAwAAAAMAIAEAAAQAMAIAAAUAIAMAAAADACABAAAEADACAAAFACAHAwAAWAAgMQEAAAABMgEAAAABMwEAAAABNAIAAAABNUAAAAABNkAAAAABAQsAACQAIAYxAQAAAAEyAQAAAAEzAQAAAAE0AgAAAAE1QAAAAAE2QAAAAAEBCwAAJgAwAQsAACYAMAcDAABXACAxAQBTACEyAQBTACEzAQBUACE0AgBWACE1QABVACE2QABVACECAAAABQAgCwAAKQAgBjEBAFMAITIBAFMAITMBAFQAITQCAFYAITVAAFUAITZAAFUAIQIAAAADACALAAArACACAAAAAwAgCwAAKwAgAwAAAAUAIBIAACQAIBMAACkAIAEAAAAFACABAAAAAwAgBgUAAE4AIBgAAE8AIBkAAFIAIBoAAFEAIBsAAFAAIDMAAE0AIAkuAAA1ADAvAAAyABAwAAA1ADAxAQA2ACEyAQA2ACEzAQA3ACE0AgA4ACE1QAA5ACE2QAA5ACEDAAAAAwAgAQAAMQAwFwAAMgAgAwAAAAMAIAEAAAQAMAIAAAUAIAkuAAA1ADAvAAAyABAwAAA1ADAxAQA2ACEyAQA2ACEzAQA3ACE0AgA4ACE1QAA5ACE2QAA5ACEOBQAAOwAgGgAAQwAgGwAAQwAgNwEAAAABOAEAAAAEOQEAAAAEOgEAAAABOwEAAAABPAEAAAABPQEAAAABPgEAQgAhPwEAAAABQAEAAAABQQEAAAABDgUAAEAAIBoAAEEAIBsAAEEAIDcBAAAAATgBAAAABTkBAAAABToBAAAAATsBAAAAATwBAAAAAT0BAAAAAT4BAD8AIT8BAAAAAUABAAAAAUEBAAAAAQ0FAAA7ACAYAAA-ACAZAAA7ACAaAAA7ACAbAAA7ACA3AgAAAAE4AgAAAAQ5AgAAAAQ6AgAAAAE7AgAAAAE8AgAAAAE9AgAAAAE-AgA9ACELBQAAOwAgGgAAPAAgGwAAPAAgN0AAAAABOEAAAAAEOUAAAAAEOkAAAAABO0AAAAABPEAAAAABPUAAAAABPkAAOgAhCwUAADsAIBoAADwAIBsAADwAIDdAAAAAAThAAAAABDlAAAAABDpAAAAAATtAAAAAATxAAAAAAT1AAAAAAT5AADoAIQg3AgAAAAE4AgAAAAQ5AgAAAAQ6AgAAAAE7AgAAAAE8AgAAAAE9AgAAAAE-AgA7ACEIN0AAAAABOEAAAAAEOUAAAAAEOkAAAAABO0AAAAABPEAAAAABPUAAAAABPkAAPAAhDQUAADsAIBgAAD4AIBkAADsAIBoAADsAIBsAADsAIDcCAAAAATgCAAAABDkCAAAABDoCAAAAATsCAAAAATwCAAAAAT0CAAAAAT4CAD0AIQg3CAAAAAE4CAAAAAQ5CAAAAAQ6CAAAAAE7CAAAAAE8CAAAAAE9CAAAAAE-CAA-ACEOBQAAQAAgGgAAQQAgGwAAQQAgNwEAAAABOAEAAAAFOQEAAAAFOgEAAAABOwEAAAABPAEAAAABPQEAAAABPgEAPwAhPwEAAAABQAEAAAABQQEAAAABCDcCAAAAATgCAAAABTkCAAAABToCAAAAATsCAAAAATwCAAAAAT0CAAAAAT4CAEAAIQs3AQAAAAE4AQAAAAU5AQAAAAU6AQAAAAE7AQAAAAE8AQAAAAE9AQAAAAE-AQBBACE_AQAAAAFAAQAAAAFBAQAAAAEOBQAAOwAgGgAAQwAgGwAAQwAgNwEAAAABOAEAAAAEOQEAAAAEOgEAAAABOwEAAAABPAEAAAABPQEAAAABPgEAQgAhPwEAAAABQAEAAAABQQEAAAABCzcBAAAAATgBAAAABDkBAAAABDoBAAAAATsBAAAAATwBAAAAAT0BAAAAAT4BAEMAIT8BAAAAAUABAAAAAUEBAAAAAQcuAABEADAvAAAcABAwAABEADAxAgA4ACFCAQA2ACFDAQA2ACFEAQA2ACEIBAAASAAgLgAARQAwLwAACQAQMAAARQAwMQIARgAhQgEARwAhQwEARwAhRAEARwAhCDcCAAAAATgCAAAABDkCAAAABDoCAAAAATsCAAAAATwCAAAAAT0CAAAAAT4CADsAIQs3AQAAAAE4AQAAAAQ5AQAAAAQ6AQAAAAE7AQAAAAE8AQAAAAE9AQAAAAE-AQBDACE_AQAAAAFAAQAAAAFBAQAAAAEDRQAAAwAgRgAAAwAgRwAAAwAgCgMAAEwAIC4AAEkAMC8AAAMAEDAAAEkAMDEBAEcAITIBAEcAITMBAEoAITQCAEYAITVAAEsAITZAAEsAIQs3AQAAAAE4AQAAAAU5AQAAAAU6AQAAAAE7AQAAAAE8AQAAAAE9AQAAAAE-AQBBACE_AQAAAAFAAQAAAAFBAQAAAAEIN0AAAAABOEAAAAAEOUAAAAAEOkAAAAABO0AAAAABPEAAAAABPUAAAAABPkAAPAAhCgQAAEgAIC4AAEUAMC8AAAkAEDAAAEUAMDECAEYAIUIBAEcAIUMBAEcAIUQBAEcAIUgAAAkAIEkAAAkAIAAAAAAAAAFNAQAAAAEBTQEAAAABAU1AAAAAAQVNAgAAAAFTAgAAAAFUAgAAAAFVAgAAAAFWAgAAAAEFEgAAbwAgEwAAcgAgSgAAcAAgSwAAcQAgUAAAAQAgAxIAAG8AIEoAAHAAIFAAAAEAIAAAAAAACxIAAF8AMBMAAGQAMEoAAGAAMEsAAGEAMEwAAGIAIE0AAGMAME4AAGMAME8AAGMAMFAAAGMAMFEAAGUAMFIAAGYAMAUxAQAAAAEyAQAAAAEzAQAAAAE1QAAAAAE2QAAAAAECAAAABQAgEgAAagAgAwAAAAUAIBIAAGoAIBMAAGkAIAELAABuADAKAwAATAAgLgAASQAwLwAAAwAQMAAASQAwMQEAAAABMgEARwAhMwEASgAhNAIARgAhNUAASwAhNkAASwAhAgAAAAUAIAsAAGkAIAIAAABnACALAABoACAJLgAAZgAwLwAAZwAQMAAAZgAwMQEARwAhMgEARwAhMwEASgAhNAIARgAhNUAASwAhNkAASwAhCS4AAGYAMC8AAGcAEDAAAGYAMDEBAEcAITIBAEcAITMBAEoAITQCAEYAITVAAEsAITZAAEsAIQUxAQBTACEyAQBTACEzAQBUACE1QABVACE2QABVACEFMQEAUwAhMgEAUwAhMwEAVAAhNUAAVQAhNkAAVQAhBTEBAAAAATIBAAAAATMBAAAAATVAAAAAATZAAAAAAQQSAABfADBKAABgADBMAABiACBQAABjADAAAQQAAGwAIAUxAQAAAAEyAQAAAAEzAQAAAAE1QAAAAAE2QAAAAAEEMQIAAAABQgEAAAABQwEAAAABRAEAAAABAgAAAAEAIBIAAG8AIAMAAAAJACASAABvACATAABzACAGAAAACQAgCwAAcwAgMQIAVgAhQgEAUwAhQwEAUwAhRAEAUwAhBDECAFYAIUIBAFMAIUMBAFMAIUQBAFMAIQIEBgIFAAMBAwABAQQHAAAAAAUFAAgYAAkZAAoaAAsbAAwAAAAAAAUFAAgYAAkZAAoaAAsbAAwBAwABAQMAAQUFABEYABIZABMaABQbABUAAAAAAAUFABEYABIZABMaABQbABUGAgEHCAEICwEJDAEKDQEMDwENEQQOEgUPFAEQFgQRFwYUGAEVGQEWGgQcHQcdHg0eHwIfIAIgIQIhIgIiIwIjJQIkJwQlKA4mKgInLAQoLQ8pLgIqLwIrMAQsMxAtNBY"
 }
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
@@ -184,7 +184,25 @@ export interface PrismaClient<
     extArgs: ExtArgs
   }>>
 
-    
+      /**
+   * `prisma.user`: Exposes CRUD operations for the **User** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Users
+    * const users = await prisma.user.findMany()
+    * ```
+    */
+  get user(): Prisma.UserDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.form`: Exposes CRUD operations for the **Form** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Forms
+    * const forms = await prisma.form.findMany()
+    * ```
+    */
+  get form(): Prisma.FormDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {
