@@ -20,25 +20,15 @@ export type FormModel = runtime.Types.Result.DefaultSelection<Prisma.$FormPayloa
 
 export type AggregateForm = {
   _count: FormCountAggregateOutputType | null
-  _avg: FormAvgAggregateOutputType | null
-  _sum: FormSumAggregateOutputType | null
   _min: FormMinAggregateOutputType | null
   _max: FormMaxAggregateOutputType | null
-}
-
-export type FormAvgAggregateOutputType = {
-  userId: number | null
-}
-
-export type FormSumAggregateOutputType = {
-  userId: number | null
 }
 
 export type FormMinAggregateOutputType = {
   id: string | null
   title: string | null
   description: string | null
-  userId: number | null
+  userId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -47,7 +37,7 @@ export type FormMaxAggregateOutputType = {
   id: string | null
   title: string | null
   description: string | null
-  userId: number | null
+  userId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,14 +52,6 @@ export type FormCountAggregateOutputType = {
   _all: number
 }
 
-
-export type FormAvgAggregateInputType = {
-  userId?: true
-}
-
-export type FormSumAggregateInputType = {
-  userId?: true
-}
 
 export type FormMinAggregateInputType = {
   id?: true
@@ -137,18 +119,6 @@ export type FormAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: FormAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: FormSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: FormMinAggregateInputType
@@ -179,8 +149,6 @@ export type FormGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: FormCountAggregateInputType | true
-  _avg?: FormAvgAggregateInputType
-  _sum?: FormSumAggregateInputType
   _min?: FormMinAggregateInputType
   _max?: FormMaxAggregateInputType
 }
@@ -189,12 +157,10 @@ export type FormGroupByOutputType = {
   id: string
   title: string
   description: string | null
-  userId: number
+  userId: string
   createdAt: Date
   updatedAt: Date
   _count: FormCountAggregateOutputType | null
-  _avg: FormAvgAggregateOutputType | null
-  _sum: FormSumAggregateOutputType | null
   _min: FormMinAggregateOutputType | null
   _max: FormMaxAggregateOutputType | null
 }
@@ -221,7 +187,7 @@ export type FormWhereInput = {
   id?: Prisma.StringFilter<"Form"> | string
   title?: Prisma.StringFilter<"Form"> | string
   description?: Prisma.StringNullableFilter<"Form"> | string | null
-  userId?: Prisma.IntFilter<"Form"> | number
+  userId?: Prisma.StringFilter<"Form"> | string
   createdAt?: Prisma.DateTimeFilter<"Form"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Form"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -246,7 +212,7 @@ export type FormWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.FormWhereInput | Prisma.FormWhereInput[]
   title?: Prisma.StringFilter<"Form"> | string
   description?: Prisma.StringNullableFilter<"Form"> | string | null
-  userId?: Prisma.IntFilter<"Form"> | number
+  userId?: Prisma.StringFilter<"Form"> | string
   createdAt?: Prisma.DateTimeFilter<"Form"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Form"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -261,10 +227,8 @@ export type FormOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.FormCountOrderByAggregateInput
-  _avg?: Prisma.FormAvgOrderByAggregateInput
   _max?: Prisma.FormMaxOrderByAggregateInput
   _min?: Prisma.FormMinOrderByAggregateInput
-  _sum?: Prisma.FormSumOrderByAggregateInput
 }
 
 export type FormScalarWhereWithAggregatesInput = {
@@ -274,7 +238,7 @@ export type FormScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Form"> | string
   title?: Prisma.StringWithAggregatesFilter<"Form"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Form"> | string | null
-  userId?: Prisma.IntWithAggregatesFilter<"Form"> | number
+  userId?: Prisma.StringWithAggregatesFilter<"Form"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Form"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Form"> | Date | string
 }
@@ -293,7 +257,7 @@ export type FormUncheckedCreateInput = {
   id?: string
   title: string
   description?: string | null
-  userId: number
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutFormInput
@@ -313,7 +277,7 @@ export type FormUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   questions?: Prisma.QuestionUncheckedUpdateManyWithoutFormNestedInput
@@ -323,7 +287,7 @@ export type FormCreateManyInput = {
   id?: string
   title: string
   description?: string | null
-  userId: number
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -340,7 +304,7 @@ export type FormUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -364,10 +328,6 @@ export type FormCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type FormAvgOrderByAggregateInput = {
-  userId?: Prisma.SortOrder
-}
-
 export type FormMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
@@ -384,10 +344,6 @@ export type FormMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type FormSumOrderByAggregateInput = {
-  userId?: Prisma.SortOrder
 }
 
 export type FormScalarRelationFilter = {
@@ -510,7 +466,7 @@ export type FormScalarWhereInput = {
   id?: Prisma.StringFilter<"Form"> | string
   title?: Prisma.StringFilter<"Form"> | string
   description?: Prisma.StringNullableFilter<"Form"> | string | null
-  userId?: Prisma.IntFilter<"Form"> | number
+  userId?: Prisma.StringFilter<"Form"> | string
   createdAt?: Prisma.DateTimeFilter<"Form"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Form"> | Date | string
 }
@@ -528,7 +484,7 @@ export type FormUncheckedCreateWithoutQuestionsInput = {
   id?: string
   title: string
   description?: string | null
-  userId: number
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -562,7 +518,7 @@ export type FormUncheckedUpdateWithoutQuestionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -696,7 +652,7 @@ export type $FormPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: string
     title: string
     description: string | null
-    userId: number
+    userId: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["form"]>
@@ -1127,7 +1083,7 @@ export interface FormFieldRefs {
   readonly id: Prisma.FieldRef<"Form", 'String'>
   readonly title: Prisma.FieldRef<"Form", 'String'>
   readonly description: Prisma.FieldRef<"Form", 'String'>
-  readonly userId: Prisma.FieldRef<"Form", 'Int'>
+  readonly userId: Prisma.FieldRef<"Form", 'String'>
   readonly createdAt: Prisma.FieldRef<"Form", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Form", 'DateTime'>
 }
