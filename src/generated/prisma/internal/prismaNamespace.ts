@@ -385,7 +385,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
-  Form: 'Form'
+  Form: 'Form',
+  Question: 'Question',
+  Option: 'Option'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -401,7 +403,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "form"
+    modelProps: "user" | "form" | "question" | "option"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -553,6 +555,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Question: {
+      payload: Prisma.$QuestionPayload<ExtArgs>
+      fields: Prisma.QuestionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.QuestionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuestionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.QuestionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuestionPayload>
+        }
+        findFirst: {
+          args: Prisma.QuestionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuestionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.QuestionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuestionPayload>
+        }
+        findMany: {
+          args: Prisma.QuestionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuestionPayload>[]
+        }
+        create: {
+          args: Prisma.QuestionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuestionPayload>
+        }
+        createMany: {
+          args: Prisma.QuestionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.QuestionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuestionPayload>[]
+        }
+        delete: {
+          args: Prisma.QuestionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuestionPayload>
+        }
+        update: {
+          args: Prisma.QuestionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuestionPayload>
+        }
+        deleteMany: {
+          args: Prisma.QuestionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.QuestionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.QuestionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuestionPayload>[]
+        }
+        upsert: {
+          args: Prisma.QuestionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuestionPayload>
+        }
+        aggregate: {
+          args: Prisma.QuestionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateQuestion>
+        }
+        groupBy: {
+          args: Prisma.QuestionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.QuestionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.QuestionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.QuestionCountAggregateOutputType> | number
+        }
+      }
+    }
+    Option: {
+      payload: Prisma.$OptionPayload<ExtArgs>
+      fields: Prisma.OptionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OptionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OptionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OptionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OptionPayload>
+        }
+        findFirst: {
+          args: Prisma.OptionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OptionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OptionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OptionPayload>
+        }
+        findMany: {
+          args: Prisma.OptionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OptionPayload>[]
+        }
+        create: {
+          args: Prisma.OptionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OptionPayload>
+        }
+        createMany: {
+          args: Prisma.OptionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OptionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OptionPayload>[]
+        }
+        delete: {
+          args: Prisma.OptionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OptionPayload>
+        }
+        update: {
+          args: Prisma.OptionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OptionPayload>
+        }
+        deleteMany: {
+          args: Prisma.OptionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OptionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OptionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OptionPayload>[]
+        }
+        upsert: {
+          args: Prisma.OptionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OptionPayload>
+        }
+        aggregate: {
+          args: Prisma.OptionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOption>
+        }
+        groupBy: {
+          args: Prisma.OptionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OptionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OptionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OptionCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -612,6 +762,28 @@ export const FormScalarFieldEnum = {
 } as const
 
 export type FormScalarFieldEnum = (typeof FormScalarFieldEnum)[keyof typeof FormScalarFieldEnum]
+
+
+export const QuestionScalarFieldEnum = {
+  id: 'id',
+  formId: 'formId',
+  text: 'text',
+  type: 'type',
+  isRequired: 'isRequired',
+  order: 'order'
+} as const
+
+export type QuestionScalarFieldEnum = (typeof QuestionScalarFieldEnum)[keyof typeof QuestionScalarFieldEnum]
+
+
+export const OptionScalarFieldEnum = {
+  id: 'id',
+  questionId: 'questionId',
+  text: 'text',
+  order: 'order'
+} as const
+
+export type OptionScalarFieldEnum = (typeof OptionScalarFieldEnum)[keyof typeof OptionScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -683,6 +855,27 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'QuestionType'
+ */
+export type EnumQuestionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QuestionType'>
+    
+
+
+/**
+ * Reference to a field of type 'QuestionType[]'
+ */
+export type ListEnumQuestionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QuestionType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -796,6 +989,8 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   form?: Prisma.FormOmit
+  question?: Prisma.QuestionOmit
+  option?: Prisma.OptionOmit
 }
 
 /* Types for Logging */

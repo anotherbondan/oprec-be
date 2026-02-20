@@ -1,4 +1,13 @@
-// 1. Tambahkan Enum untuk membatasi jenis pertanyaan yang valid
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  moduleFormat    = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
 enum QuestionType {
   SHORT_TEXT
   LONG_TEXT

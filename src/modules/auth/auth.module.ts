@@ -8,9 +8,11 @@ import { JwtStrategy } from './jwt.strategy';
 @Module({
   imports: [
     PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'RAHASIA_SUPER_KUAT', 
-      signOptions: { expiresIn: '60s' },
+    JwtModule.registerAsync({
+      useFactory: async () => ({
+        secret: process.env.JWT_SECRET,
+        signOptions: { expiresIn: process.env.JWT_EXPIRATION_TIME as any },
+      }),
     }),
   ],
   controllers: [AuthController],
