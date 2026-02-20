@@ -6,6 +6,7 @@ import { FormsModule } from './modules/forms/forms.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { PrismaModule } from './prisma.module';
 import { ConfigModule } from '@nestjs/config';
+import { QuestionsModule } from './modules/questions/questions.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ConfigModule } from '@nestjs/config';
     FormsModule,
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
+    QuestionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

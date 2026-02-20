@@ -1,8 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.setGlobalPrefix('api');
 
   app.enableCors({
     origin: process.env.FRONTEND_URL,
@@ -10,6 +13,10 @@ async function bootstrap() {
     credentials: true,
   });
 
-  await app.listen(process.env.PORT || 3001);
+  app.use(cookieParser());
+
+  console.log('Server is running on port: ', process.env.PORT ?? 8000);
+
+  await app.listen(process.env.PORT ?? 8000);
 }
 bootstrap();
