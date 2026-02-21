@@ -8,6 +8,7 @@ import { PrismaModule } from './prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { QuestionsModule } from './modules/questions/questions.module';
 import { OptionsModule } from './modules/options/options.module';
+import { SubmissionsModule } from './modules/submissions/submissions.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { OptionsModule } from './modules/options/options.module';
     ConfigModule.forRoot({ isGlobal: true }),
     QuestionsModule,
     OptionsModule,
+    SubmissionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
