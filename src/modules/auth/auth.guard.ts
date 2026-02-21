@@ -6,9 +6,10 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import * as jwt from 'jsonwebtoken';
+import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
-export class JwtAuthGuard implements CanActivate {
+export class JwtAuthGuard extends AuthGuard('jwt') {
   canActivate(context: ExecutionContext): boolean {
     const request: Request = context.switchToHttp().getRequest();
 
@@ -28,14 +29,13 @@ export class JwtAuthGuard implements CanActivate {
     if (!authHeader) {
       throw new UnauthorizedException('No authorization token provided');
     }
-    
+
     if (!authHeader.startsWith('Bearer ')) {
       throw new UnauthorizedException('Invalid authorization format');
     }
 
     const splitHeader = authHeader.split(' ');
     const token = splitHeader[1]; // Extract token
-
 
     if (!token) {
       throw new UnauthorizedException('No authentication token provided');

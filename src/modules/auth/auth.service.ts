@@ -16,16 +16,20 @@ export class AuthService {
     const saltOrRounds = 10;
     const hashedPassword = await bcrypt.hash(data.password, saltOrRounds);
 
-    const user = await this.prisma.user.create({
-      data: {
-        email: data.email,
-        name: data.name,
-        password: hashedPassword,
-      },
-    });
+    try {
+      const user = await this.prisma.user.create({
+        data: {
+          email: data.email,
+          name: data.name,
+          password: hashedPassword,
+        },
+      });
 
-    const { password, ...result } = user;
-    return result;
+      const { password, ...result } = user;
+      return result;
+    } catch (error) {
+      throw new UnauthorizedException('Email already exists');
+    }
   }
 
   async login(data: LoginDto) {
@@ -38,7 +42,7 @@ export class AuthService {
     if (!isPasswordValid)
       throw new UnauthorizedException('Credential not valid');
 
-    const payload = { userId: user.id, email: user.email };
+    const payload = { id: user.id, email: user.email };
     return {
       access_token: await this.jwtService.signAsync(payload),
       user: {

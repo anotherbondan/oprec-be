@@ -1,30 +1,124 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
+import { CreateFormDto } from './dto/create-form.dto';
+import { UpdateFormDto } from './dto/update-form.dto';
 
 @Injectable()
 export class FormsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  create(data: any) {
-    return this.prisma.form.create({ data });
-  }
 
-  findAll() {
-    return this.prisma.form.findMany();
-  }
-
-  findOne(id: string) {
-    return this.prisma.form.findUnique({ where: { id } });
-  }
-
-  update(id: string, data: any) {
-    return this.prisma.form.update({
-      where: { id },
-      data,
+  async create(userId: string, dto: CreateFormDto) {
+    return this.prisma.form.create({
+      data: {
+        title: dto.title,
+        description: dto.description,
+        userId,
+      },
+      include: {
+        questions: true,
+      },
     });
   }
 
-  remove(id: string) {
-    return this.prisma.form.delete({ where: { id } });
+
+  async findAll(userId: string, page = 1, limit = 10) {
+    const skip = (page - 1) * limit;
+
+    const [forms, total] = await this.prisma.$transaction([
+      this.prisma.form.findMany({
+        where: { userId },
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      this.prisma.form.count({
+        where: { userId },
+      }),
+    ]);
+
+    return {
+      data: forms,
+      meta: {
+        total,
+        page,
+        lastPage: Math.ceil(total / limit),
+      },
+    };
+  }
+
+
+  async findOne(userId: string, id: string) {
+    const form = await this.prisma.form.findFirst({
+      where: {
+        id,
+        userId,
+      },
+      include: {
+        questions: {
+          orderBy: { order: 'asc' },
+          include: {
+            options: {
+              orderBy: { order: 'asc' },
+            },
+          },
+        },
+      },
+    });
+
+    if (!form) {
+      throw new NotFoundException('Form not found');
+    }
+
+    return form;
+  }
+
+
+  async update(userId: string, id: string, dto: UpdateFormDto) {
+    const existing = await this.prisma.form.findFirst({
+      where: { id, userId },
+    });
+
+    if (!existing) {
+      throw new NotFoundException('Form not found');
+    }
+
+    return this.prisma.form.update({
+      where: { id },
+      data: {
+        title: dto.title,
+        description: dto.description,
+      },
+      include: {
+        questions: {
+          orderBy: { order: 'asc' },
+          include: {
+            options: {
+              orderBy: { order: 'asc' },
+            },
+          },
+        },
+      },
+    });
+  }
+
+
+  async remove(userId: string, id: string) {
+    const existing = await this.prisma.form.findFirst({
+      where: { id, userId },
+    });
+
+    if (!existing) {
+      throw new NotFoundException('Form not found');
+    }
+
+    await this.prisma.form.delete({
+      where: { id },
+    });
+
+    return { message: 'Form deleted successfully' };
   }
 }
