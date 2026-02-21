@@ -41,10 +41,10 @@ export class AuthService {
     const payload = { userId: user.id, email: user.email };
     return {
       access_token: await this.jwtService.signAsync(payload),
-    user: {
-      name: user.name,
-      email: user.email,
-    },
+      user: {
+        name: user.name,
+        email: user.email,
+      },
     };
   }
 }

@@ -21,7 +21,7 @@ export class FormsController {
   create(@Body() createFormDto: any, @Request() req) {
     return this.formService.create({
       ...createFormDto,
-      userId: req.user.userId, 
+      userId: req.user.id, 
     });
   }
 
