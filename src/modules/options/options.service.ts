@@ -12,15 +12,15 @@ export class OptionsService {
     return `This action returns all options`;
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} option`;
   }
 
-  update(id: number, updateOptionDto: UpdateOptionDto) {
+  update(id: string, updateOptionDto: UpdateOptionDto) {
     return `This action updates a #${id} option`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} option`;
   }
 }
