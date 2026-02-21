@@ -25,6 +25,10 @@ export class JwtAuthGuard implements CanActivate {
 
     const authHeader = request.headers['authorization'] as string;
 
+    if (!authHeader) {
+      throw new UnauthorizedException('No authorization token provided');
+    }
+    
     if (!authHeader.startsWith('Bearer ')) {
       throw new UnauthorizedException('Invalid authorization format');
     }
@@ -32,9 +36,6 @@ export class JwtAuthGuard implements CanActivate {
     const splitHeader = authHeader.split(' ');
     const token = splitHeader[1]; // Extract token
 
-    if (!authHeader) {
-      throw new UnauthorizedException('No authorization token provided');
-    }
 
     if (!token) {
       throw new UnauthorizedException('No authentication token provided');
