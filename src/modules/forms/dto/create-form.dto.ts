@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { FormStatus } from '../../../generated/prisma/enums';
 
 export class CreateFormDto {
   @ApiProperty({ example: 'My Survey' })
@@ -11,4 +12,9 @@ export class CreateFormDto {
   @IsString()
   @IsOptional()
   description?: string;
+
+  @ApiPropertyOptional({ enum: FormStatus, example: 'DRAFT', default: 'DRAFT' })
+  @IsEnum(FormStatus)
+  @IsOptional()
+  status?: FormStatus;
 }

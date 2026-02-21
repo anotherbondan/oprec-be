@@ -23,6 +23,7 @@ import { FormsService } from './forms.service';
 import { JwtAuthGuard } from '../auth/auth.guard';
 import { CreateFormDto } from './dto/create-form.dto';
 import { UpdateFormDto } from './dto/update-form.dto';
+import { FormStatus } from '../../generated/prisma/enums';
 
 @ApiTags('Forms')
 @ApiBearerAuth()
@@ -47,14 +48,28 @@ export class FormsController {
     enum: ['asc', 'desc'],
     description: 'Sort by creation date',
   })
+  @ApiQuery({
+    name: 'status',
+    required: false,
+    enum: FormStatus,
+    description: 'Filter by form status',
+  })
   findAll(
     @Request() req,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
     @Query('search') search?: string,
     @Query('sort') sort?: 'asc' | 'desc',
+    @Query('status') status?: FormStatus,
   ) {
-    return this.formsService.findAll(req.user.id, page, limit, search, sort);
+    return this.formsService.findAll(
+      req.user.id,
+      page,
+      limit,
+      search,
+      sort,
+      status,
+    );
   }
 
   @Get(':id')

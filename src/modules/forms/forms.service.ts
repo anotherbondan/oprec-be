@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { CreateFormDto } from './dto/create-form.dto';
 import { UpdateFormDto } from './dto/update-form.dto';
+import { FormStatus } from '../../generated/prisma/enums';
 
 @Injectable()
 export class FormsService {
@@ -12,6 +13,7 @@ export class FormsService {
       data: {
         title: dto.title,
         description: dto.description,
+        status: dto.status,
         userId,
       },
       include: {
@@ -26,6 +28,7 @@ export class FormsService {
     limit = 10,
     search?: string,
     sort: 'asc' | 'desc' = 'desc',
+    status?: FormStatus,
   ) {
     const skip = (page - 1) * limit;
 
@@ -34,6 +37,7 @@ export class FormsService {
       ...(search && {
         title: { contains: search, mode: 'insensitive' as const },
       }),
+      ...(status && { status }),
     };
 
     const [forms, total] = await this.prisma.$transaction([
@@ -95,6 +99,7 @@ export class FormsService {
       data: {
         title: dto.title,
         description: dto.description,
+        status: dto.status,
       },
       include: {
         questions: {

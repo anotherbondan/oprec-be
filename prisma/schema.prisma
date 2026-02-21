@@ -16,6 +16,12 @@ enum QuestionType {
   DROPDOWN
 }
 
+enum FormStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+}
+
 model User {
   id       String      @id @default(uuid())
   email    String   @unique
@@ -28,6 +34,7 @@ model Form {
   id          String     @id @default(uuid())
   title       String
   description String?
+  status      FormStatus @default(DRAFT)
   userId      String
   user        User       @relation(fields: [userId], references: [id])
   createdAt   DateTime   @default(now())
