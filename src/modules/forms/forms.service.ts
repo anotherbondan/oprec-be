@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { CreateFormDto } from './dto/create-form.dto';
 import { UpdateFormDto } from './dto/update-form.dto';
@@ -9,7 +6,6 @@ import { UpdateFormDto } from './dto/update-form.dto';
 @Injectable()
 export class FormsService {
   constructor(private readonly prisma: PrismaService) {}
-
 
   async create(userId: string, dto: CreateFormDto) {
     return this.prisma.form.create({
@@ -24,20 +20,30 @@ export class FormsService {
     });
   }
 
-
-  async findAll(userId: string, page = 1, limit = 10) {
+  async findAll(
+    userId: string,
+    page = 1,
+    limit = 10,
+    search?: string,
+    sort: 'asc' | 'desc' = 'desc',
+  ) {
     const skip = (page - 1) * limit;
+
+    const where = {
+      userId,
+      ...(search && {
+        title: { contains: search, mode: 'insensitive' as const },
+      }),
+    };
 
     const [forms, total] = await this.prisma.$transaction([
       this.prisma.form.findMany({
-        where: { userId },
-        orderBy: { createdAt: 'desc' },
+        where,
+        orderBy: { createdAt: sort },
         skip,
         take: limit,
       }),
-      this.prisma.form.count({
-        where: { userId },
-      }),
+      this.prisma.form.count({ where }),
     ]);
 
     return {
@@ -49,7 +55,6 @@ export class FormsService {
       },
     };
   }
-
 
   async findOne(userId: string, id: string) {
     const form = await this.prisma.form.findFirst({
@@ -75,7 +80,6 @@ export class FormsService {
 
     return form;
   }
-
 
   async update(userId: string, id: string, dto: UpdateFormDto) {
     const existing = await this.prisma.form.findFirst({
@@ -104,7 +108,6 @@ export class FormsService {
       },
     });
   }
-
 
   async remove(userId: string, id: string) {
     const existing = await this.prisma.form.findFirst({
