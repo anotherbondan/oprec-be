@@ -46,6 +46,9 @@ export class FormsService {
         orderBy: { createdAt: sort },
         skip,
         take: limit,
+        include: {
+          _count: { select: { questions: true } },
+        },
       }),
       this.prisma.form.count({ where }),
     ]);

@@ -14,6 +14,11 @@ import { QuestionType } from '../../../generated/prisma/enums';
 import { CreateOptionDto } from '../../options/dto/create-option.dto';
 
 export class CreateQuestionDto {
+  @ApiProperty({ example: 'form-uuid' })
+  @IsString()
+  @IsNotEmpty()
+  formId: string;
+
   @ApiProperty({ example: 'What is your name?' })
   @IsString()
   @IsNotEmpty()
