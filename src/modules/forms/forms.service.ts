@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { CreateFormDto } from './dto/create-form.dto';
 import { UpdateFormDto } from './dto/update-form.dto';
@@ -125,6 +125,10 @@ export class FormsService {
 
     if (!existing) {
       throw new NotFoundException('Form not found');
+    }
+
+    if (existing.userId !== userId) {
+      throw new UnauthorizedException('You are not authorized to delete this form');
     }
 
     await this.prisma.form.delete({
