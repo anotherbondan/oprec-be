@@ -9,7 +9,21 @@
 * 🟢 You can import this file directly.
 */
 
+export const QuestionType = {
+  SHORT_TEXT: 'SHORT_TEXT',
+  LONG_TEXT: 'LONG_TEXT',
+  RADIO: 'RADIO',
+  CHECKBOX: 'CHECKBOX',
+  DROPDOWN: 'DROPDOWN'
+} as const
+
+export type QuestionType = (typeof QuestionType)[keyof typeof QuestionType]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const FormStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  CLOSED: 'CLOSED'
+} as const
+
+export type FormStatus = (typeof FormStatus)[keyof typeof FormStatus]

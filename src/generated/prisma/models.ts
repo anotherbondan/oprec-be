@@ -10,4 +10,8 @@
  */
 export type * from './models/User.js'
 export type * from './models/Form.js'
+export type * from './models/Question.js'
+export type * from './models/Option.js'
+export type * from './models/Submission.js'
+export type * from './models/Answer.js'
 export type * from './commonInputTypes.js'

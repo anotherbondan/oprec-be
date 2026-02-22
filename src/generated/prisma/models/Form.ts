@@ -20,25 +20,16 @@ export type FormModel = runtime.Types.Result.DefaultSelection<Prisma.$FormPayloa
 
 export type AggregateForm = {
   _count: FormCountAggregateOutputType | null
-  _avg: FormAvgAggregateOutputType | null
-  _sum: FormSumAggregateOutputType | null
   _min: FormMinAggregateOutputType | null
   _max: FormMaxAggregateOutputType | null
-}
-
-export type FormAvgAggregateOutputType = {
-  userId: number | null
-}
-
-export type FormSumAggregateOutputType = {
-  userId: number | null
 }
 
 export type FormMinAggregateOutputType = {
   id: string | null
   title: string | null
   description: string | null
-  userId: number | null
+  status: $Enums.FormStatus | null
+  userId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -47,7 +38,8 @@ export type FormMaxAggregateOutputType = {
   id: string | null
   title: string | null
   description: string | null
-  userId: number | null
+  status: $Enums.FormStatus | null
+  userId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -56,6 +48,7 @@ export type FormCountAggregateOutputType = {
   id: number
   title: number
   description: number
+  status: number
   userId: number
   createdAt: number
   updatedAt: number
@@ -63,18 +56,11 @@ export type FormCountAggregateOutputType = {
 }
 
 
-export type FormAvgAggregateInputType = {
-  userId?: true
-}
-
-export type FormSumAggregateInputType = {
-  userId?: true
-}
-
 export type FormMinAggregateInputType = {
   id?: true
   title?: true
   description?: true
+  status?: true
   userId?: true
   createdAt?: true
   updatedAt?: true
@@ -84,6 +70,7 @@ export type FormMaxAggregateInputType = {
   id?: true
   title?: true
   description?: true
+  status?: true
   userId?: true
   createdAt?: true
   updatedAt?: true
@@ -93,6 +80,7 @@ export type FormCountAggregateInputType = {
   id?: true
   title?: true
   description?: true
+  status?: true
   userId?: true
   createdAt?: true
   updatedAt?: true
@@ -137,18 +125,6 @@ export type FormAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: FormAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: FormSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: FormMinAggregateInputType
@@ -179,8 +155,6 @@ export type FormGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: FormCountAggregateInputType | true
-  _avg?: FormAvgAggregateInputType
-  _sum?: FormSumAggregateInputType
   _min?: FormMinAggregateInputType
   _max?: FormMaxAggregateInputType
 }
@@ -189,12 +163,11 @@ export type FormGroupByOutputType = {
   id: string
   title: string
   description: string | null
-  userId: number
+  status: $Enums.FormStatus
+  userId: string
   createdAt: Date
   updatedAt: Date
   _count: FormCountAggregateOutputType | null
-  _avg: FormAvgAggregateOutputType | null
-  _sum: FormSumAggregateOutputType | null
   _min: FormMinAggregateOutputType | null
   _max: FormMaxAggregateOutputType | null
 }
@@ -221,20 +194,26 @@ export type FormWhereInput = {
   id?: Prisma.StringFilter<"Form"> | string
   title?: Prisma.StringFilter<"Form"> | string
   description?: Prisma.StringNullableFilter<"Form"> | string | null
-  userId?: Prisma.IntFilter<"Form"> | number
+  status?: Prisma.EnumFormStatusFilter<"Form"> | $Enums.FormStatus
+  userId?: Prisma.StringFilter<"Form"> | string
   createdAt?: Prisma.DateTimeFilter<"Form"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Form"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  questions?: Prisma.QuestionListRelationFilter
+  submissions?: Prisma.SubmissionListRelationFilter
 }
 
 export type FormOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  questions?: Prisma.QuestionOrderByRelationAggregateInput
+  submissions?: Prisma.SubmissionOrderByRelationAggregateInput
 }
 
 export type FormWhereUniqueInput = Prisma.AtLeast<{
@@ -244,24 +223,26 @@ export type FormWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.FormWhereInput | Prisma.FormWhereInput[]
   title?: Prisma.StringFilter<"Form"> | string
   description?: Prisma.StringNullableFilter<"Form"> | string | null
-  userId?: Prisma.IntFilter<"Form"> | number
+  status?: Prisma.EnumFormStatusFilter<"Form"> | $Enums.FormStatus
+  userId?: Prisma.StringFilter<"Form"> | string
   createdAt?: Prisma.DateTimeFilter<"Form"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Form"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  questions?: Prisma.QuestionListRelationFilter
+  submissions?: Prisma.SubmissionListRelationFilter
 }, "id">
 
 export type FormOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.FormCountOrderByAggregateInput
-  _avg?: Prisma.FormAvgOrderByAggregateInput
   _max?: Prisma.FormMaxOrderByAggregateInput
   _min?: Prisma.FormMinOrderByAggregateInput
-  _sum?: Prisma.FormSumOrderByAggregateInput
 }
 
 export type FormScalarWhereWithAggregatesInput = {
@@ -271,7 +252,8 @@ export type FormScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Form"> | string
   title?: Prisma.StringWithAggregatesFilter<"Form"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Form"> | string | null
-  userId?: Prisma.IntWithAggregatesFilter<"Form"> | number
+  status?: Prisma.EnumFormStatusWithAggregatesFilter<"Form"> | $Enums.FormStatus
+  userId?: Prisma.StringWithAggregatesFilter<"Form"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Form"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Form"> | Date | string
 }
@@ -280,43 +262,56 @@ export type FormCreateInput = {
   id?: string
   title: string
   description?: string | null
+  status?: $Enums.FormStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutFormsInput
+  questions?: Prisma.QuestionCreateNestedManyWithoutFormInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutFormInput
 }
 
 export type FormUncheckedCreateInput = {
   id?: string
   title: string
   description?: string | null
-  userId: number
+  status?: $Enums.FormStatus
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutFormInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutFormInput
 }
 
 export type FormUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFormStatusFieldUpdateOperationsInput | $Enums.FormStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutFormsNestedInput
+  questions?: Prisma.QuestionUpdateManyWithoutFormNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutFormNestedInput
 }
 
 export type FormUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumFormStatusFieldUpdateOperationsInput | $Enums.FormStatus
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  questions?: Prisma.QuestionUncheckedUpdateManyWithoutFormNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutFormNestedInput
 }
 
 export type FormCreateManyInput = {
   id?: string
   title: string
   description?: string | null
-  userId: number
+  status?: $Enums.FormStatus
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -325,6 +320,7 @@ export type FormUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFormStatusFieldUpdateOperationsInput | $Enums.FormStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -333,7 +329,8 @@ export type FormUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumFormStatusFieldUpdateOperationsInput | $Enums.FormStatus
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -352,19 +349,17 @@ export type FormCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type FormAvgOrderByAggregateInput = {
-  userId?: Prisma.SortOrder
 }
 
 export type FormMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -374,13 +369,15 @@ export type FormMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
-export type FormSumOrderByAggregateInput = {
-  userId?: Prisma.SortOrder
+export type FormScalarRelationFilter = {
+  is?: Prisma.FormWhereInput
+  isNot?: Prisma.FormWhereInput
 }
 
 export type FormCreateNestedManyWithoutUserInput = {
@@ -429,24 +426,62 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
+export type EnumFormStatusFieldUpdateOperationsInput = {
+  set?: $Enums.FormStatus
+}
+
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type FormCreateNestedOneWithoutQuestionsInput = {
+  create?: Prisma.XOR<Prisma.FormCreateWithoutQuestionsInput, Prisma.FormUncheckedCreateWithoutQuestionsInput>
+  connectOrCreate?: Prisma.FormCreateOrConnectWithoutQuestionsInput
+  connect?: Prisma.FormWhereUniqueInput
+}
+
+export type FormUpdateOneRequiredWithoutQuestionsNestedInput = {
+  create?: Prisma.XOR<Prisma.FormCreateWithoutQuestionsInput, Prisma.FormUncheckedCreateWithoutQuestionsInput>
+  connectOrCreate?: Prisma.FormCreateOrConnectWithoutQuestionsInput
+  upsert?: Prisma.FormUpsertWithoutQuestionsInput
+  connect?: Prisma.FormWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FormUpdateToOneWithWhereWithoutQuestionsInput, Prisma.FormUpdateWithoutQuestionsInput>, Prisma.FormUncheckedUpdateWithoutQuestionsInput>
+}
+
+export type FormCreateNestedOneWithoutSubmissionsInput = {
+  create?: Prisma.XOR<Prisma.FormCreateWithoutSubmissionsInput, Prisma.FormUncheckedCreateWithoutSubmissionsInput>
+  connectOrCreate?: Prisma.FormCreateOrConnectWithoutSubmissionsInput
+  connect?: Prisma.FormWhereUniqueInput
+}
+
+export type FormUpdateOneRequiredWithoutSubmissionsNestedInput = {
+  create?: Prisma.XOR<Prisma.FormCreateWithoutSubmissionsInput, Prisma.FormUncheckedCreateWithoutSubmissionsInput>
+  connectOrCreate?: Prisma.FormCreateOrConnectWithoutSubmissionsInput
+  upsert?: Prisma.FormUpsertWithoutSubmissionsInput
+  connect?: Prisma.FormWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FormUpdateToOneWithWhereWithoutSubmissionsInput, Prisma.FormUpdateWithoutSubmissionsInput>, Prisma.FormUncheckedUpdateWithoutSubmissionsInput>
 }
 
 export type FormCreateWithoutUserInput = {
   id?: string
   title: string
   description?: string | null
+  status?: $Enums.FormStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  questions?: Prisma.QuestionCreateNestedManyWithoutFormInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutFormInput
 }
 
 export type FormUncheckedCreateWithoutUserInput = {
   id?: string
   title: string
   description?: string | null
+  status?: $Enums.FormStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutFormInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutFormInput
 }
 
 export type FormCreateOrConnectWithoutUserInput = {
@@ -482,15 +517,137 @@ export type FormScalarWhereInput = {
   id?: Prisma.StringFilter<"Form"> | string
   title?: Prisma.StringFilter<"Form"> | string
   description?: Prisma.StringNullableFilter<"Form"> | string | null
-  userId?: Prisma.IntFilter<"Form"> | number
+  status?: Prisma.EnumFormStatusFilter<"Form"> | $Enums.FormStatus
+  userId?: Prisma.StringFilter<"Form"> | string
   createdAt?: Prisma.DateTimeFilter<"Form"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Form"> | Date | string
+}
+
+export type FormCreateWithoutQuestionsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  status?: $Enums.FormStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutFormsInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutFormInput
+}
+
+export type FormUncheckedCreateWithoutQuestionsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  status?: $Enums.FormStatus
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutFormInput
+}
+
+export type FormCreateOrConnectWithoutQuestionsInput = {
+  where: Prisma.FormWhereUniqueInput
+  create: Prisma.XOR<Prisma.FormCreateWithoutQuestionsInput, Prisma.FormUncheckedCreateWithoutQuestionsInput>
+}
+
+export type FormUpsertWithoutQuestionsInput = {
+  update: Prisma.XOR<Prisma.FormUpdateWithoutQuestionsInput, Prisma.FormUncheckedUpdateWithoutQuestionsInput>
+  create: Prisma.XOR<Prisma.FormCreateWithoutQuestionsInput, Prisma.FormUncheckedCreateWithoutQuestionsInput>
+  where?: Prisma.FormWhereInput
+}
+
+export type FormUpdateToOneWithWhereWithoutQuestionsInput = {
+  where?: Prisma.FormWhereInput
+  data: Prisma.XOR<Prisma.FormUpdateWithoutQuestionsInput, Prisma.FormUncheckedUpdateWithoutQuestionsInput>
+}
+
+export type FormUpdateWithoutQuestionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFormStatusFieldUpdateOperationsInput | $Enums.FormStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutFormsNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutFormNestedInput
+}
+
+export type FormUncheckedUpdateWithoutQuestionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFormStatusFieldUpdateOperationsInput | $Enums.FormStatus
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutFormNestedInput
+}
+
+export type FormCreateWithoutSubmissionsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  status?: $Enums.FormStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutFormsInput
+  questions?: Prisma.QuestionCreateNestedManyWithoutFormInput
+}
+
+export type FormUncheckedCreateWithoutSubmissionsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  status?: $Enums.FormStatus
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutFormInput
+}
+
+export type FormCreateOrConnectWithoutSubmissionsInput = {
+  where: Prisma.FormWhereUniqueInput
+  create: Prisma.XOR<Prisma.FormCreateWithoutSubmissionsInput, Prisma.FormUncheckedCreateWithoutSubmissionsInput>
+}
+
+export type FormUpsertWithoutSubmissionsInput = {
+  update: Prisma.XOR<Prisma.FormUpdateWithoutSubmissionsInput, Prisma.FormUncheckedUpdateWithoutSubmissionsInput>
+  create: Prisma.XOR<Prisma.FormCreateWithoutSubmissionsInput, Prisma.FormUncheckedCreateWithoutSubmissionsInput>
+  where?: Prisma.FormWhereInput
+}
+
+export type FormUpdateToOneWithWhereWithoutSubmissionsInput = {
+  where?: Prisma.FormWhereInput
+  data: Prisma.XOR<Prisma.FormUpdateWithoutSubmissionsInput, Prisma.FormUncheckedUpdateWithoutSubmissionsInput>
+}
+
+export type FormUpdateWithoutSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFormStatusFieldUpdateOperationsInput | $Enums.FormStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutFormsNestedInput
+  questions?: Prisma.QuestionUpdateManyWithoutFormNestedInput
+}
+
+export type FormUncheckedUpdateWithoutSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFormStatusFieldUpdateOperationsInput | $Enums.FormStatus
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  questions?: Prisma.QuestionUncheckedUpdateManyWithoutFormNestedInput
 }
 
 export type FormCreateManyUserInput = {
   id?: string
   title: string
   description?: string | null
+  status?: $Enums.FormStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -499,42 +656,92 @@ export type FormUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFormStatusFieldUpdateOperationsInput | $Enums.FormStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  questions?: Prisma.QuestionUpdateManyWithoutFormNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutFormNestedInput
 }
 
 export type FormUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFormStatusFieldUpdateOperationsInput | $Enums.FormStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  questions?: Prisma.QuestionUncheckedUpdateManyWithoutFormNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutFormNestedInput
 }
 
 export type FormUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFormStatusFieldUpdateOperationsInput | $Enums.FormStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type FormCountOutputType
+ */
+
+export type FormCountOutputType = {
+  questions: number
+  submissions: number
+}
+
+export type FormCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  questions?: boolean | FormCountOutputTypeCountQuestionsArgs
+  submissions?: boolean | FormCountOutputTypeCountSubmissionsArgs
+}
+
+/**
+ * FormCountOutputType without action
+ */
+export type FormCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FormCountOutputType
+   */
+  select?: Prisma.FormCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * FormCountOutputType without action
+ */
+export type FormCountOutputTypeCountQuestionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.QuestionWhereInput
+}
+
+/**
+ * FormCountOutputType without action
+ */
+export type FormCountOutputTypeCountSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubmissionWhereInput
+}
 
 
 export type FormSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
   description?: boolean
+  status?: boolean
   userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  questions?: boolean | Prisma.Form$questionsArgs<ExtArgs>
+  submissions?: boolean | Prisma.Form$submissionsArgs<ExtArgs>
+  _count?: boolean | Prisma.FormCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["form"]>
 
 export type FormSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
   description?: boolean
+  status?: boolean
   userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -545,6 +752,7 @@ export type FormSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   title?: boolean
   description?: boolean
+  status?: boolean
   userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -555,14 +763,18 @@ export type FormSelectScalar = {
   id?: boolean
   title?: boolean
   description?: boolean
+  status?: boolean
   userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FormOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["form"]>
+export type FormOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "status" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["form"]>
 export type FormInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  questions?: boolean | Prisma.Form$questionsArgs<ExtArgs>
+  submissions?: boolean | Prisma.Form$submissionsArgs<ExtArgs>
+  _count?: boolean | Prisma.FormCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FormIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -575,12 +787,15 @@ export type $FormPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "Form"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    questions: Prisma.$QuestionPayload<ExtArgs>[]
+    submissions: Prisma.$SubmissionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     title: string
     description: string | null
-    userId: number
+    status: $Enums.FormStatus
+    userId: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["form"]>
@@ -978,6 +1193,8 @@ readonly fields: FormFieldRefs;
 export interface Prisma__FormClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  questions<T extends Prisma.Form$questionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Form$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  submissions<T extends Prisma.Form$submissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Form$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1010,7 +1227,8 @@ export interface FormFieldRefs {
   readonly id: Prisma.FieldRef<"Form", 'String'>
   readonly title: Prisma.FieldRef<"Form", 'String'>
   readonly description: Prisma.FieldRef<"Form", 'String'>
-  readonly userId: Prisma.FieldRef<"Form", 'Int'>
+  readonly status: Prisma.FieldRef<"Form", 'FormStatus'>
+  readonly userId: Prisma.FieldRef<"Form", 'String'>
   readonly createdAt: Prisma.FieldRef<"Form", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Form", 'DateTime'>
 }
@@ -1406,6 +1624,54 @@ export type FormDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Forms to delete.
    */
   limit?: number
+}
+
+/**
+ * Form.questions
+ */
+export type Form$questionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Question
+   */
+  select?: Prisma.QuestionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Question
+   */
+  omit?: Prisma.QuestionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QuestionInclude<ExtArgs> | null
+  where?: Prisma.QuestionWhereInput
+  orderBy?: Prisma.QuestionOrderByWithRelationInput | Prisma.QuestionOrderByWithRelationInput[]
+  cursor?: Prisma.QuestionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.QuestionScalarFieldEnum | Prisma.QuestionScalarFieldEnum[]
+}
+
+/**
+ * Form.submissions
+ */
+export type Form$submissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Submission
+   */
+  select?: Prisma.SubmissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Submission
+   */
+  omit?: Prisma.SubmissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubmissionInclude<ExtArgs> | null
+  where?: Prisma.SubmissionWhereInput
+  orderBy?: Prisma.SubmissionOrderByWithRelationInput | Prisma.SubmissionOrderByWithRelationInput[]
+  cursor?: Prisma.SubmissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubmissionScalarFieldEnum | Prisma.SubmissionScalarFieldEnum[]
 }
 
 /**

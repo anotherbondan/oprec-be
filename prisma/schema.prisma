@@ -1,4 +1,13 @@
-// 1. Tambahkan Enum untuk membatasi jenis pertanyaan yang valid
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  moduleFormat    = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
 enum QuestionType {
   SHORT_TEXT
   LONG_TEXT
@@ -7,8 +16,14 @@ enum QuestionType {
   DROPDOWN
 }
 
+enum FormStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+}
+
 model User {
-  id       Int      @id @default(autoincrement())
+  id       String      @id @default(uuid())
   email    String   @unique
   name     String
   password String
@@ -19,12 +34,14 @@ model Form {
   id          String     @id @default(uuid())
   title       String
   description String?
-  userId      Int
+  status      FormStatus @default(DRAFT)
+  userId      String
   user        User       @relation(fields: [userId], references: [id])
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   
   questions   Question[] 
+  submissions Submission[]
 }
 
 model Question {
@@ -38,6 +55,7 @@ model Question {
   order       Int           
   
   options     Option[]
+  answers     Answer[]
 }
 
 model Option {
@@ -47,4 +65,22 @@ model Option {
   
   text        String    
   order       Int       
+}
+
+model Submission {
+  id        String   @id @default(uuid())
+  formId    String
+  form      Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  answers   Answer[]
+}
+
+model Answer {
+  id           String     @id @default(uuid())
+  submissionId String
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  questionId   String
+  question     Question   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  value        String
 }

@@ -4,9 +4,23 @@ import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { FormsModule } from './modules/forms/forms.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { PrismaModule } from './prisma.module';
+import { ConfigModule } from '@nestjs/config';
+import { QuestionsModule } from './modules/questions/questions.module';
+import { OptionsModule } from './modules/options/options.module';
+import { SubmissionsModule } from './modules/submissions/submissions.module';
 
 @Module({
-  imports: [UsersModule, FormsModule, AuthModule],
+  imports: [
+    PrismaModule,
+    UsersModule,
+    FormsModule,
+    AuthModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+    QuestionsModule,
+    OptionsModule,
+    SubmissionsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
