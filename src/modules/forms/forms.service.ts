@@ -63,26 +63,27 @@ export class FormsService {
     };
   }
 
-  async findOne(userId: string, id: string) {
-    const form = await this.prisma.form.findFirst({
-      where: {
-        id,
-        userId,
-      },
+  async findOne(userId: string, formId: string) {
+    const form = await this.prisma.form.findUnique({
+      where: { id: formId },
       include: {
         questions: {
+          include: { options: true },
           orderBy: { order: 'asc' },
-          include: {
-            options: {
-              orderBy: { order: 'asc' },
-            },
-          },
         },
       },
     });
 
     if (!form) {
       throw new NotFoundException('Form not found');
+    }
+
+    if (form.userId === userId) {
+      return form;
+    }
+
+    if (form.status !== FormStatus.PUBLISHED) {
+      throw new NotFoundException('Form not published yet');
     }
 
     return form;
