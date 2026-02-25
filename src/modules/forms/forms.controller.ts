@@ -62,14 +62,7 @@ export class FormsController {
     @Query('sort') sort?: 'asc' | 'desc',
     @Query('status') status?: FormStatus,
   ) {
-    return this.formsService.findAll(
-      req.user.id,
-      page,
-      limit,
-      search,
-      sort,
-      status,
-    );
+    return this.formsService.findAll(req.user.id, search, sort, status);
   }
 
   @Get(':id')

@@ -52,12 +52,7 @@ export class SubmissionsController {
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
   ) {
-    return this.submissionsService.findAllByForm(
-      req.user.id,
-      formId,
-      page,
-      limit,
-    );
+    return this.submissionsService.findAllByForm(req.user.id, formId);
   }
 
   @Get(':id')

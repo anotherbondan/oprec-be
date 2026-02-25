@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { CreateFormDto } from './dto/create-form.dto';
 import { UpdateFormDto } from './dto/update-form.dto';
@@ -24,14 +28,10 @@ export class FormsService {
 
   async findAll(
     userId: string,
-    page = 1,
-    limit = 10,
     search?: string,
     sort: 'asc' | 'desc' = 'desc',
     status?: FormStatus,
   ) {
-    const skip = (page - 1) * limit;
-
     const where = {
       userId,
       ...(search && {
@@ -44,8 +44,6 @@ export class FormsService {
       this.prisma.form.findMany({
         where,
         orderBy: { createdAt: sort },
-        skip,
-        take: limit,
         include: {
           _count: { select: { questions: true } },
         },
@@ -53,14 +51,7 @@ export class FormsService {
       this.prisma.form.count({ where }),
     ]);
 
-    return {
-      data: forms,
-      meta: {
-        total,
-        page,
-        lastPage: Math.ceil(total / limit),
-      },
-    };
+    return forms;
   }
 
   async findOne(userId: string, formId: string) {
@@ -128,7 +119,9 @@ export class FormsService {
     }
 
     if (existing.userId !== userId) {
-      throw new UnauthorizedException('You are not authorized to delete this form');
+      throw new UnauthorizedException(
+        'You are not authorized to delete this form',
+      );
     }
 
     await this.prisma.form.delete({
