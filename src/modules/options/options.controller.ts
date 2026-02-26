@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Request
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -17,7 +18,6 @@ import { OptionsService } from './options.service';
 import { CreateOptionDto } from './dto/create-option.dto';
 import { UpdateOptionDto } from './dto/update-option.dto';
 import { JwtAuthGuard } from '../auth/auth.guard';
-import { CurrentUser } from '../auth/current-user.decorator';
 
 @ApiTags('Options')
 @ApiBearerAuth()
@@ -30,8 +30,8 @@ export class OptionsController {
   @ApiOperation({ summary: 'Create an option for a question' })
   @ApiResponse({ status: 201, description: 'Option created' })
   @ApiResponse({ status: 404, description: 'Question not found' })
-  create(@CurrentUser() user, @Body() createOptionDto: CreateOptionDto) {
-    return this.optionsService.create(user.id, createOptionDto);
+  create(@Request() req,  @Body() createOptionDto: CreateOptionDto) {
+    return this.optionsService.create(req.user.id, createOptionDto);
   }
 
   @Patch(':id')
@@ -39,18 +39,18 @@ export class OptionsController {
   @ApiResponse({ status: 200, description: 'Option updated' })
   @ApiResponse({ status: 404, description: 'Option not found' })
   update(
+    @Request() req,
     @Param('id') id: string,
-    @CurrentUser() user,
     @Body() updateOptionDto: UpdateOptionDto,
   ) {
-    return this.optionsService.update(user.id, id, updateOptionDto);
+    return this.optionsService.update(req.user.id, id, updateOptionDto);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete an option' })
   @ApiResponse({ status: 200, description: 'Option deleted' })
   @ApiResponse({ status: 404, description: 'Option not found' })
-  remove(@Param('id') id: string, @CurrentUser() user) {
-    return this.optionsService.remove(user.id, id);
+  remove(@Param('id') id: string, @Request() req) {
+    return this.optionsService.remove(req.user.id, id);
   }
 }

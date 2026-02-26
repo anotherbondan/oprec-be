@@ -9,8 +9,6 @@ import {
   UseGuards,
   Request,
   Query,
-  ParseIntPipe,
-  DefaultValuePipe,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -34,8 +32,6 @@ export class FormsController {
 
   @Get()
   @ApiOperation({ summary: 'List all forms (paginated, with search and sort)' })
-  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
-  @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
   @ApiQuery({
     name: 'search',
     required: false,
@@ -56,8 +52,6 @@ export class FormsController {
   })
   findAll(
     @Request() req,
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
     @Query('search') search?: string,
     @Query('sort') sort?: 'asc' | 'desc',
     @Query('status') status?: FormStatus,
