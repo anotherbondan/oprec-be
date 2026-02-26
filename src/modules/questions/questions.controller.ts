@@ -19,6 +19,7 @@ import { QuestionsService } from './questions.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { UpdateQuestionDto } from './dto/update-question.dto';
 import { JwtAuthGuard } from '../auth/auth.guard';
+import { Question } from './entities/question.entity';
 
 @ApiTags('Questions')
 @ApiBearerAuth()
@@ -29,7 +30,7 @@ export class QuestionsController {
 
   @Post()
   @ApiOperation({ summary: 'Create a question for a form' })
-  @ApiResponse({ status: 201, description: 'Question created' })
+  @ApiResponse({ status: 201, description: 'Question created', type: Question })
   @ApiResponse({ status: 404, description: 'Form not found' })
   create(@Body() createQuestionDto: CreateQuestionDto, @Request() req) {
     return this.questionsService.create(req.user.id, createQuestionDto);
@@ -37,7 +38,7 @@ export class QuestionsController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a question by ID' })
-  @ApiResponse({ status: 200, description: 'Question found' })
+  @ApiResponse({ status: 200, description: 'Question found', type: Question })
   @ApiResponse({ status: 404, description: 'Question not found' })
   findOne(@Param('id') id: string, @Request() req) {
     return this.questionsService.findOne(req.user.id, id);
@@ -45,7 +46,7 @@ export class QuestionsController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update a question' })
-  @ApiResponse({ status: 200, description: 'Question updated' })
+  @ApiResponse({ status: 200, description: 'Question updated', type: Question })
   @ApiResponse({ status: 404, description: 'Question not found' })
   update(
     @Param('id') id: string,

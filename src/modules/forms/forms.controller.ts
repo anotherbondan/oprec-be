@@ -22,6 +22,7 @@ import { JwtAuthGuard } from '../auth/auth.guard';
 import { CreateFormDto } from './dto/create-form.dto';
 import { UpdateFormDto } from './dto/update-form.dto';
 import { FormStatus } from '../../generated/prisma/enums';
+import { Form } from './entities/form.entity';
 
 @ApiTags('Forms')
 @ApiBearerAuth()
@@ -32,6 +33,7 @@ export class FormsController {
 
   @Get()
   @ApiOperation({ summary: 'List all forms (paginated, with search and sort)' })
+  @ApiResponse({ status: 200, description: 'List of forms', type: [Form] })
   @ApiQuery({
     name: 'search',
     required: false,
@@ -61,7 +63,7 @@ export class FormsController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a form by ID with questions and options' })
-  @ApiResponse({ status: 200, description: 'Form found' })
+  @ApiResponse({ status: 200, description: 'Form found', type: Form })
   @ApiResponse({ status: 404, description: 'Form not found' })
   findOne(@Param('id') id: string, @Request() req) {
     return this.formsService.findOne(req.user.id, id);
@@ -69,14 +71,14 @@ export class FormsController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new form' })
-  @ApiResponse({ status: 201, description: 'Form created' })
+  @ApiResponse({ status: 201, description: 'Form created', type: Form })
   create(@Body() createFormDto: CreateFormDto, @Request() req) {
     return this.formsService.create(req.user.id, createFormDto);
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update a form' })
-  @ApiResponse({ status: 200, description: 'Form updated' })
+  @ApiResponse({ status: 200, description: 'Form updated', type: Form })
   @ApiResponse({ status: 404, description: 'Form not found' })
   update(
     @Param('id') id: string,
