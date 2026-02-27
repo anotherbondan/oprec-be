@@ -28,7 +28,7 @@ export class AuthService {
       const { password, ...result } = user;
       return result;
     } catch (error) {
-      throw new UnauthorizedException('Email already exists');
+      throw new UnauthorizedException("Failed to register");
     }
   }
 
