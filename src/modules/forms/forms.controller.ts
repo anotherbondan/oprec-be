@@ -9,8 +9,6 @@ import {
   UseGuards,
   Request,
   Query,
-  ParseIntPipe,
-  DefaultValuePipe,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -24,6 +22,7 @@ import { JwtAuthGuard } from '../auth/auth.guard';
 import { CreateFormDto } from './dto/create-form.dto';
 import { UpdateFormDto } from './dto/update-form.dto';
 import { FormStatus } from '../../generated/prisma/enums';
+import { Form } from './entities/form.entity';
 
 @ApiTags('Forms')
 @ApiBearerAuth()
@@ -34,8 +33,7 @@ export class FormsController {
 
   @Get()
   @ApiOperation({ summary: 'List all forms (paginated, with search and sort)' })
-  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
-  @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
+  @ApiResponse({ status: 200, description: 'List of forms', type: [Form] })
   @ApiQuery({
     name: 'search',
     required: false,
@@ -56,25 +54,16 @@ export class FormsController {
   })
   findAll(
     @Request() req,
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
     @Query('search') search?: string,
     @Query('sort') sort?: 'asc' | 'desc',
     @Query('status') status?: FormStatus,
   ) {
-    return this.formsService.findAll(
-      req.user.id,
-      page,
-      limit,
-      search,
-      sort,
-      status,
-    );
+    return this.formsService.findAll(req.user.id, search, sort, status);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a form by ID with questions and options' })
-  @ApiResponse({ status: 200, description: 'Form found' })
+  @ApiResponse({ status: 200, description: 'Form found', type: Form })
   @ApiResponse({ status: 404, description: 'Form not found' })
   findOne(@Param('id') id: string, @Request() req) {
     return this.formsService.findOne(req.user.id, id);
@@ -82,14 +71,14 @@ export class FormsController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new form' })
-  @ApiResponse({ status: 201, description: 'Form created' })
+  @ApiResponse({ status: 201, description: 'Form created', type: Form })
   create(@Body() createFormDto: CreateFormDto, @Request() req) {
     return this.formsService.create(req.user.id, createFormDto);
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update a form' })
-  @ApiResponse({ status: 200, description: 'Form updated' })
+  @ApiResponse({ status: 200, description: 'Form updated', type: Form })
   @ApiResponse({ status: 404, description: 'Form not found' })
   update(
     @Param('id') id: string,

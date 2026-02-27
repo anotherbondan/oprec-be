@@ -64,7 +64,7 @@ export class SubmissionsService {
     });
   }
 
-  async findAllByForm(userId: string, formId: string, page = 1, limit = 10) {
+  async findAllByForm(userId: string, formId: string) {
     const form = await this.prisma.form.findFirst({
       where: { id: formId, userId },
     });
@@ -73,14 +73,11 @@ export class SubmissionsService {
       throw new NotFoundException('Form not found');
     }
 
-    const skip = (page - 1) * limit;
 
     const [submissions, total] = await this.prisma.$transaction([
       this.prisma.submission.findMany({
         where: { formId },
         orderBy: { createdAt: 'desc' },
-        skip,
-        take: limit,
         include: {
           answers: {
             include: { question: true },
@@ -90,14 +87,7 @@ export class SubmissionsService {
       this.prisma.submission.count({ where: { formId } }),
     ]);
 
-    return {
-      data: submissions,
-      meta: {
-        total,
-        page,
-        lastPage: Math.ceil(total / limit),
-      },
-    };
+    return submissions;
   }
 
   async findOne(userId: string, formId: string, submissionId: string) {

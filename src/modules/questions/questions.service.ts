@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { UpdateQuestionDto } from './dto/update-question.dto';
@@ -79,10 +83,21 @@ export class QuestionsService {
         id,
         form: { userId },
       },
+      include: {
+        form: { include: { _count: { select: { submissions: true } } } },
+      },
     });
 
     if (!question) {
       throw new NotFoundException('Question not found');
+    }
+
+    if (dto.type !== undefined && dto.type !== question.type) {
+      if (question.form._count.submissions > 0) {
+        throw new BadRequestException(
+          'Cannot change question type: form already has submissions',
+        );
+      }
     }
 
     return this.prisma.question.update({
@@ -107,10 +122,19 @@ export class QuestionsService {
         id,
         form: { userId },
       },
+      include: {
+        form: { include: { _count: { select: { submissions: true } } } },
+      },
     });
 
     if (!question) {
       throw new NotFoundException('Question not found');
+    }
+
+    if (question.form._count.submissions > 0) {
+      throw new BadRequestException(
+        'Cannot delete question: form already has submissions',
+      );
     }
 
     await this.prisma.question.delete({

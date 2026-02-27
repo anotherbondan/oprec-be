@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { CreateOptionDto } from './dto/create-option.dto';
 import { UpdateOptionDto } from './dto/update-option.dto';
@@ -9,7 +6,6 @@ import { UpdateOptionDto } from './dto/update-option.dto';
 @Injectable()
 export class OptionsService {
   constructor(private readonly prisma: PrismaService) {}
-
 
   async create(userId: string, dto: CreateOptionDto) {
     const question = await this.prisma.question.findFirst({
@@ -39,7 +35,6 @@ export class OptionsService {
     });
   }
 
-
   async findOne(userId: string, id: string) {
     const option = await this.prisma.option.findFirst({
       where: {
@@ -59,22 +54,8 @@ export class OptionsService {
     return option;
   }
 
-
   async update(userId: string, id: string, dto: UpdateOptionDto) {
-    const option = await this.prisma.option.findFirst({
-      where: {
-        id,
-        question: {
-          form: {
-            userId,
-          },
-        },
-      },
-    });
-
-    if (!option) {
-      throw new NotFoundException('Option not found');
-    }
+    await this.findOne(userId, id);
 
     return this.prisma.option.update({
       where: { id },
@@ -84,22 +65,8 @@ export class OptionsService {
     });
   }
 
-
   async remove(userId: string, id: string) {
-    const option = await this.prisma.option.findFirst({
-      where: {
-        id,
-        question: {
-          form: {
-            userId,
-          },
-        },
-      },
-    });
-
-    if (!option) {
-      throw new NotFoundException('Option not found');
-    }
+    await this.findOne(userId, id);
 
     await this.prisma.option.delete({
       where: { id },

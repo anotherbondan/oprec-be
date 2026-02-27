@@ -6,20 +6,17 @@ import {
   Param,
   UseGuards,
   Request,
-  Query,
-  ParseIntPipe,
-  DefaultValuePipe,
 } from '@nestjs/common';
 import {
   ApiTags,
   ApiBearerAuth,
   ApiOperation,
   ApiResponse,
-  ApiQuery,
 } from '@nestjs/swagger';
 import { SubmissionsService } from './submissions.service';
 import { CreateSubmissionDto } from './dto/create-submission.dto';
 import { JwtAuthGuard } from '../auth/auth.guard';
+import { Submission } from './entities/submission.entity';
 
 @ApiTags('Submissions')
 @Controller('forms/:formId/submissions')
@@ -28,7 +25,11 @@ export class SubmissionsController {
 
   @Post()
   @ApiOperation({ summary: 'Submit answers to a published form (public)' })
-  @ApiResponse({ status: 201, description: 'Submission created' })
+  @ApiResponse({
+    status: 201,
+    description: 'Submission created',
+    type: Submission,
+  })
   @ApiResponse({
     status: 400,
     description: 'Form not published or validation failed',
@@ -42,29 +43,25 @@ export class SubmissionsController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'List submissions for a form (owner only)' })
-  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
-  @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
-  @ApiResponse({ status: 200, description: 'Submissions listed' })
+  @ApiResponse({
+    status: 200,
+    description: 'Submissions listed',
+    type: [Submission],
+  })
   @ApiResponse({ status: 404, description: 'Form not found' })
-  findAll(
-    @Param('formId') formId: string,
-    @Request() req,
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-  ) {
-    return this.submissionsService.findAllByForm(
-      req.user.id,
-      formId,
-      page,
-      limit,
-    );
+  findAll(@Param('formId') formId: string, @Request() req) {
+    return this.submissionsService.findAllByForm(req.user.id, formId);
   }
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a single submission (owner only)' })
-  @ApiResponse({ status: 200, description: 'Submission found' })
+  @ApiResponse({
+    status: 200,
+    description: 'Submission found',
+    type: Submission,
+  })
   @ApiResponse({ status: 404, description: 'Form or submission not found' })
   findOne(
     @Param('formId') formId: string,
