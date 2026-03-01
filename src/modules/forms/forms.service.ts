@@ -40,16 +40,13 @@ export class FormsService {
       ...(status && { status }),
     };
 
-    const [forms, total] = await this.prisma.$transaction([
-      this.prisma.form.findMany({
-        where,
-        orderBy: { createdAt: sort },
-        include: {
-          _count: { select: { questions: true } },
-        },
-      }),
-      this.prisma.form.count({ where }),
-    ]);
+    const forms = await this.prisma.form.findMany({
+      where,
+      orderBy: { createdAt: sort },
+      include: {
+        _count: { select: { questions: true } },
+      },
+    });
 
     return forms;
   }
